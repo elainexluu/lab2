@@ -147,7 +147,36 @@ Instruction parse_instruction(uint32_t instruction_bits) {
  * interpreted an n-bit integer. */
 int sign_extend_number(unsigned int field, unsigned int n) {
   /* YOUR CODE HERE */
-  return 0;
+
+  // store the sign bit into var
+  unsigned int msb = (field >> (n-1)) & 1;
+
+  if (msb == 1) { // sign bit is negative
+
+    // add leading 0s to create a 32-bit int
+    // result gives higher order bits all 1s
+    unsigned int append = (1 << (32-n)) - 1;
+
+    // extend the higher order bits into 32-bit int
+    unsigned int extend = append << n;
+
+    // bit mask to set the field number with the extended 32-bit int from above
+    unsigned int mask = field | extend;
+
+    return mask;
+
+  } else { // if sign bit is positive (0)
+
+    unsigned int set = (1 << n) - 1;
+
+    unsigned int mask = field & set;
+
+    return mask;
+
+  }
+
+
+  // return 0;
 }
 
 /* Return the number of bytes (from the current PC) to the branch label using
