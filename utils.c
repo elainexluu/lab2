@@ -39,6 +39,97 @@ Instruction parse_instruction(uint32_t instruction_bits) {
   // cases for other types of instructions
   /* YOUR CODE HERE */
 
+  // I-Type
+  case 0x03:
+    instruction.itype.rd = instruction_bits & ((1U << 5) - 1);
+    instruction_bits >>= 5;
+
+    instruction.itype.funct3 = instruction_bits & ((1U << 3) - 1);
+    instruction_bits >>= 3;
+
+    instruction.itype.rs1 = instruction_bits & ((1U << 5) - 1);
+    instruction_bits >>= 5;
+
+    instruction.itype.imm = instruction_bits & ((1U << 12) - 1);
+    break;
+  
+  case 0x13:
+    instruction.itype.rd = instruction_bits & ((1U << 5) - 1);
+    instruction_bits >>= 5;
+
+    instruction.itype.funct3 = instruction_bits & ((1U << 3) - 1);
+    instruction_bits >>= 3;
+
+    instruction.itype.rs1 = instruction_bits & ((1U << 5) - 1);
+    instruction_bits >>= 5;
+
+    instruction.itype.imm = instruction_bits & ((1U << 12) - 1);
+    break;
+  
+  case 0x73:
+    instruction.itype.rd = instruction_bits & ((1U << 5) - 1);
+    instruction_bits >>= 5;
+
+    instruction.itype.funct3 = instruction_bits & ((1U << 3) - 1);
+    instruction_bits >>= 3;
+
+    instruction.itype.rs1 = instruction_bits & ((1U << 5) - 1);
+    instruction_bits >>= 5;
+
+    instruction.itype.imm = instruction_bits & ((1U << 12) - 1);
+    break;
+  
+  ////////////////////////////////////////////////////////////////////////
+  // U-Type
+  case 0x37:
+    instruction.utype.rd = instruction_bits & ((1U << 5) - 1);
+    instruction_bits >>= 5;
+
+    instruction.utype.imm = instruction_bits & ((1U << 20) - 1);
+    break;
+  
+  // UJ-Type
+  case 0x6f:
+    instruction.ujtype.rd = instruction_bits & ((1U << 5) - 1);
+    instruction_bits >>= 5;
+
+    instruction.ujtype.imm = instruction_bits & ((1U << 20) - 1);
+    break;
+  ////////////////////////////////////////////////////////////////////////
+  // S-Type
+  case 0x23:
+    instruction.stype.imm5 = instruction_bits & ((1U << 5) - 1);
+    instruction_bits >>= 5;
+
+    instruction.stype.funct3 = instruction_bits & ((1U << 3) - 1);
+    instruction_bits >>= 3;
+
+    instruction.stype.rs1 = instruction_bits & ((1U << 5) - 1);
+    instruction_bits >>= 5;
+
+    instruction.stype.rs2 = instruction_bits & ((1U << 5) - 1);
+    instruction_bits >>= 5;
+
+    instruction.stype.imm7 = instruction_bits & ((1U << 7) - 1);
+    break;
+
+  // SB-Type
+  case 0x63:
+    instruction.sbtype.imm5 = instruction_bits & ((1U << 5) - 1);
+    instruction_bits >>= 5;
+
+    instruction.sbtype.funct3 = instruction_bits & ((1U << 3) - 1);
+    instruction_bits >>= 3;
+
+    instruction.sbtype.rs1 = instruction_bits & ((1U << 5) - 1);
+    instruction_bits >>= 5;
+
+    instruction.sbtype.rs2 = instruction_bits & ((1U << 5) - 1);
+    instruction_bits >>= 5;
+
+    instruction.sbtype.imm7 = instruction_bits & ((1U << 7) - 1);
+    break;
+
   #ifndef TESTING
   default:
     exit(EXIT_FAILURE);
