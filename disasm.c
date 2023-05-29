@@ -73,7 +73,7 @@ void write_rtype(Instruction instruction) {
 
         /* YOUR CODE HERE */
         case 0x01:
-            switch (instruction.rtype.funct3) {
+            switch (instruction.rtype.funct7) {
                 case 0x0:
                     print_rtype("sll", instruction);
                     break;
@@ -89,7 +89,7 @@ void write_rtype(Instruction instruction) {
             print_rtype("slt", instruction);
 
         case 0x4:
-            switch (instruction.rtype.funct3) {
+            switch (instruction.rtype.funct7) {
                 case 0x0:
                     print_rtype("xor", instruction);
                     break;
@@ -102,7 +102,7 @@ void write_rtype(Instruction instruction) {
             break;
         
         case 0x5:
-            switch (instruction.rtype.funct3) {
+            switch (instruction.rtype.funct7) {
                 case 0x0:
                     print_rtype("srl", instruction);
                     break;
@@ -116,7 +116,7 @@ void write_rtype(Instruction instruction) {
             break;
 
         case 0x6:
-            switch (instruction.rtype.funct3) {
+            switch (instruction.rtype.funct7) {
                 case 0x0:
                     print_rtype("or", instruction);
                     break;
@@ -141,7 +141,11 @@ void write_rtype(Instruction instruction) {
 
 void write_itype_except_load(Instruction instruction) {
     switch (instruction.itype.funct3) {
+      
       /* YOUR CODE HERE */
+        case
+
+
       /* call print_itype_except_load */
         default:
             handle_invalid_instruction(instruction);
