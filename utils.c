@@ -183,6 +183,8 @@ int sign_extend_number(unsigned int field, unsigned int n) {
  * the given branch instruction */
 int get_branch_offset(Instruction instruction) {
   /* YOUR CODE HERE */
+
+  
   return 0;
 }
 
