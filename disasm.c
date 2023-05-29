@@ -143,8 +143,35 @@ void write_itype_except_load(Instruction instruction) {
     switch (instruction.itype.funct3) {
       
       /* YOUR CODE HERE */
-        case
+        case 0x0:
+            print_itype_except_load("addi", instruction);
 
+        case 0x1:
+            print_itype_except_load("slli", instruction);
+
+        case 0x2:
+            print_itype_except_load("slti", instruction);
+
+        case 0x4:
+            print_itype_except_load("xori", instruction);
+
+        case 0x5:
+            switch (instruction.itype.imm[5:11]) {
+                case 0x00:
+                    print_itype_except_load("srli", instruction);
+                case 0x20:
+                    print_itype_except_load("srai", instruction);
+                default:
+                    handle_invalid_instruction(instruction);
+                break;
+            }
+            break;
+        
+        case 0x6:
+            print_itype_except_load("ori", instruction);
+
+        case 0x7:
+            print_itype_except_load("andi", instruction);
 
       /* call print_itype_except_load */
         default:
