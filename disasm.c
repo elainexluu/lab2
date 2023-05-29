@@ -24,27 +24,35 @@ void decode_instruction(uint32_t instruction_bits) {
         case 0x33:
             write_rtype(instruction);
             break;
+
         case 0x13:
             write_itype_except_load(instruction);
             break;
+
         case 0x3:
             write_load(instruction);
             break;
+
         case 0x23:
             write_store(instruction);
             break;
+
         case 0x63:
             write_branch(instruction);
             break;
+
         case 0x37:
             print_lui(instruction);
             break;
+
         case 0x6F:
             print_jal(instruction);
             break;
+
         case 0x73:
             print_ecall(instruction);
             break;
+
         default: // undefined opcode
             handle_invalid_instruction(instruction);
             break;
@@ -59,12 +67,15 @@ void write_rtype(Instruction instruction) {
                 case 0x0:
 		            print_rtype("add", instruction);
                     break;
+
 		        case 0x1:
                     print_rtype("mul", instruction);
                     break;
+
                 case 0x20:
                     print_rtype("sub", instruction);
                     break;
+
                 default:
                     handle_invalid_instruction(instruction);
                 break;      
@@ -77,8 +88,11 @@ void write_rtype(Instruction instruction) {
                 case 0x0:
                     print_rtype("sll", instruction);
                     break;
+
                 case 0x01:
                     print_rtype("mulh", instruction);
+                    break;
+
                 default:
                     handle_invalid_instruction(instruction);
                 break;
@@ -87,14 +101,18 @@ void write_rtype(Instruction instruction) {
 
         case 0x2:
             print_rtype("slt", instruction);
+            break;
 
         case 0x4:
             switch (instruction.rtype.funct7) {
                 case 0x0:
                     print_rtype("xor", instruction);
                     break;
+
                 case 0x01:
                     print_rtype("div", instruction);
+                    break;
+
                 default:
                     handle_invalid_instruction(instruction);
                 break;
@@ -106,9 +124,11 @@ void write_rtype(Instruction instruction) {
                 case 0x0:
                     print_rtype("srl", instruction);
                     break;
+
                 case 0x20:
                     print_rtype("sra", instruction);
                     break;
+
                 default:
                     handle_invalid_instruction(instruction);
                 break;
@@ -120,9 +140,11 @@ void write_rtype(Instruction instruction) {
                 case 0x0:
                     print_rtype("or", instruction);
                     break;
+
                 case 0x1:
                     print_rtype("rem", instruction);
                     break;
+
                 default:
                     handle_invalid_instruction(instruction);
                     break;
@@ -131,6 +153,7 @@ void write_rtype(Instruction instruction) {
 
         case 0x7:
             print_rtype("and", instruction);
+            break;
 
         /* call print_rtype */
         default:
@@ -145,22 +168,30 @@ void write_itype_except_load(Instruction instruction) {
       /* YOUR CODE HERE */
         case 0x0:
             print_itype_except_load("addi", instruction);
+            break;
 
         case 0x1:
             print_itype_except_load("slli", instruction);
+            break;
 
         case 0x2:
             print_itype_except_load("slti", instruction);
+            break;
 
         case 0x4:
             print_itype_except_load("xori", instruction);
+            break;
 
         case 0x5:
             switch (instruction.itype.imm[5:11]) {
                 case 0x00:
                     print_itype_except_load("srli", instruction);
+                    break;
+
                 case 0x20:
                     print_itype_except_load("srai", instruction);
+                    break;
+
                 default:
                     handle_invalid_instruction(instruction);
                 break;
@@ -169,9 +200,11 @@ void write_itype_except_load(Instruction instruction) {
         
         case 0x6:
             print_itype_except_load("ori", instruction);
+            break;
 
         case 0x7:
             print_itype_except_load("andi", instruction);
+            break;
 
       /* call print_itype_except_load */
         default:
@@ -182,7 +215,19 @@ void write_itype_except_load(Instruction instruction) {
 
 void write_load(Instruction instruction) {
     switch (instruction.itype.funct3) {
+
       /* YOUR CODE HERE */
+        case 0x0:
+            print_load("lb", instruction);
+            break;
+
+        case 0x1:
+            print_load("lh", instruction);
+
+        case 0x2:
+            print_load("lw", instruction);
+            break;
+
       /* call print_load */
         default:
             handle_invalid_instruction(instruction);
@@ -192,7 +237,20 @@ void write_load(Instruction instruction) {
 
 void write_store(Instruction instruction) {
     switch (instruction.stype.funct3) {
+
       /* YOUR CODE HERE */
+        case 0x0:
+            print_store("sb", instruction);
+            break;
+        
+        case 0x1:
+            print_store("sh", instruction);
+            break;
+
+        case 0x2:
+            print_store("sw", instruction);
+            break;
+      
       /* call print_store */
         default:
             handle_invalid_instruction(instruction);
@@ -202,7 +260,16 @@ void write_store(Instruction instruction) {
 
 void write_branch(Instruction instruction) {
     switch (instruction.sbtype.funct3) {
+
       /* YOUR CODE HERE */
+        case 0x0:
+            print_branch("beq", instruction);
+            break;  
+      
+        case 0x1:
+            print_branch("bne", instruction);
+            break;
+            
       /* call print_branch */
         default:
             handle_invalid_instruction(instruction);
