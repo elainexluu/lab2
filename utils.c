@@ -157,7 +157,7 @@ int sign_extend_number(unsigned int field, unsigned int n) {
     // result gives higher order bits all 1s
     unsigned int append = (1 << (32-n)) - 1;
 
-    // extend the higher order bits into 32-bit int
+    // extend the higher order bits into 32-bit int 
     unsigned int extend = append << n;
 
     // bit mask to set the field number with the extended 32-bit int from above
@@ -183,8 +183,8 @@ int sign_extend_number(unsigned int field, unsigned int n) {
  * the given branch instruction */
 int get_branch_offset(Instruction instruction) {
   /* YOUR CODE HERE */
+  // instruction.sbtype.
 
-  
   return 0;
 }
 
@@ -199,7 +199,17 @@ int get_jump_offset(Instruction instruction) {
  * given store instruction */
 int get_store_offset(Instruction instruction) {
   /* YOUR CODE HERE */
-  return 0;
+
+  // shift imm7 to align with imm5 in order to concatenate the bits
+  int align_imm7 = instruction.stype.imm7 << 5;
+
+  // concatenating imm7 and imm5 to get 1 immediate
+  int offset = align_imm7 | instruction.stype.imm5;
+
+  // Sign-extend the offset to 32 bits (PC is 32)
+  offset = sign_extend_number(offset, 20);
+
+  return offset;
 }
 /************************Helper functions************************/
 
