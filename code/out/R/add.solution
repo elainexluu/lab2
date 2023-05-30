@@ -1,0 +1,3 @@
+00001000: add	x8, x0, x0
+sll	x8, x0, x0
+slt	x8, x0, x0

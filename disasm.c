@@ -80,7 +80,6 @@ void write_rtype(Instruction instruction) {
                     handle_invalid_instruction(instruction);
                 break;      
             }
-            break;
 
         /* YOUR CODE HERE */
         case 0x01:
@@ -97,7 +96,6 @@ void write_rtype(Instruction instruction) {
                     handle_invalid_instruction(instruction);
                 break;
             }
-            break;
 
         case 0x2:
             print_rtype("slt", instruction);
@@ -117,7 +115,6 @@ void write_rtype(Instruction instruction) {
                     handle_invalid_instruction(instruction);
                 break;
             }
-            break;
         
         case 0x5:
             switch (instruction.rtype.funct7) {
@@ -149,7 +146,6 @@ void write_rtype(Instruction instruction) {
                     handle_invalid_instruction(instruction);
                     break;
             }
-            break;
 
         case 0x7:
             print_rtype("and", instruction);
@@ -167,43 +163,42 @@ void write_itype_except_load(Instruction instruction) {
       
       /* YOUR CODE HERE */
         case 0x0:
-            print_itype_except_load("addi", instruction);
+            print_itype_except_load("addi", instruction, instruction.itype.imm);
             break;
 
         case 0x1:
-            print_itype_except_load("slli", instruction);
+            print_itype_except_load("slli", instruction, instruction.itype.imm);
             break;
 
         case 0x2:
-            print_itype_except_load("slti", instruction);
+            print_itype_except_load("slti", instruction, instruction.itype.imm);
             break;
 
         case 0x4:
-            print_itype_except_load("xori", instruction);
+            print_itype_except_load("xori", instruction, instruction.itype.imm);
             break;
 
         case 0x5:
-            switch (instruction.itype.imm[5:11]) {
+            switch (instruction.itype.imm) {
                 case 0x00:
-                    print_itype_except_load("srli", instruction);
+                    print_itype_except_load("srli", instruction, instruction.itype.imm);
                     break;
 
                 case 0x20:
-                    print_itype_except_load("srai", instruction);
+                    print_itype_except_load("srai", instruction, instruction.itype.imm);
                     break;
 
                 default:
                     handle_invalid_instruction(instruction);
                 break;
             }
-            break;
         
         case 0x6:
-            print_itype_except_load("ori", instruction);
+            print_itype_except_load("ori", instruction, instruction.itype.imm);
             break;
 
         case 0x7:
-            print_itype_except_load("andi", instruction);
+            print_itype_except_load("andi", instruction, instruction.itype.imm);
             break;
 
       /* call print_itype_except_load */
@@ -269,7 +264,7 @@ void write_branch(Instruction instruction) {
         case 0x1:
             print_branch("bne", instruction);
             break;
-            
+
       /* call print_branch */
         default:
             handle_invalid_instruction(instruction);
@@ -283,29 +278,42 @@ void print_rtype(char *name, Instruction instruction) {
 }
 
 void print_itype_except_load(char *name, Instruction instruction, int imm) {
+    
     /* YOUR CODE HERE */
+    printf(ITYPE_FORMAT, name, instruction.itype.rd, instruction.itype.rs1,
+        instruction.itype.imm);
 }
 
 void print_load(char *name, Instruction instruction) {
+
     /* YOUR CODE HERE */
+    
 }
 
 void print_store(char *name, Instruction instruction) {
     /* YOUR CODE HERE */
+    printf(MEM_FORMAT, name, instruction.stype.rs2, instruction.stype.imm5,
+        instruction.stype.rs1);
 }
 
 void print_branch(char *name, Instruction instruction) {
-    /* YOUR CODE HERE */
+    /* YOUR CODE HERE */    
+    printf(BRANCH_FORMAT, name, instruction.sbtype.rs1, instruction.sbtype.rs2,
+        instruction.sbtype.imm5);
 }
 
 void print_lui(Instruction instruction) {
     /* YOUR CODE HERE */
+    printf(LUI_FORMAT, instruction.utype.rd, instruction.utype.imm);
+
 }
 
 void print_jal(Instruction instruction) {
     /* YOUR CODE HERE */
+    printf(JAL_FORMAT, instruction.ujtype.rd, instruction.ujtype.imm);
 }
 
 void print_ecall(Instruction instruction) {
     /* YOUR CODE HERE */
+    printf(ECALL_FORMAT);
 }
