@@ -183,9 +183,31 @@ int sign_extend_number(unsigned int field, unsigned int n) {
  * the given branch instruction */
 int get_branch_offset(Instruction instruction) {
   /* YOUR CODE HERE */
-  // instruction.sbtype.
 
-  return 0;
+  // int extract_imm12 = instruction.sbtype.imm7 >> 6;
+  // int extract_imm11 = instruction.sbtype.imm5 | 1;
+
+  // // extracting the 4 most right bits in imm5
+  // int imm5 = (instruction.sbtype.imm5 & 0xF) << 1;
+  // int imm7 = instruction.sbtype.imm7 << 5; // shift to align with imm5 for concat.
+
+  // imm12 = imm12 << 13;
+  // imm11 = imm11 << 12;
+
+  // int offset = (imm12 | imm11 | imm7 | imm5) << 1;
+
+  // offset = sign_extend_number(offset, 20);
+
+  int imm12 = (instruction.sbtype.imm7 & 0x40) >> 6;
+  int imm11 = (instruction.sbtype.imm5 & 0x3E) >> 2;
+  int imm7 = (instruction.sbtype.imm7 & 0x01) << 4;
+  int imm5 = (instruction.sbtype.imm5 & 0x0F) << 1;
+
+  int offset = imm12 | imm11 | imm7 | imm5;
+  offset = sign_extend_number(offset, 20);  // Sign-extend the offset to 32 bits
+
+
+  return offset;
 }
 
 /* Returns the number of bytes (from the current PC) to the jump label using the
