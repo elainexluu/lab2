@@ -287,6 +287,8 @@ void print_itype_except_load(char *name, Instruction instruction, int imm) {
 void print_load(char *name, Instruction instruction) {
 
     /* YOUR CODE HERE */
+    printf(MEM_FORMAT, name, instruction.itype.rd, instruction.itype.rs1,
+        instruction.itype.imm);
     
 }
 

@@ -198,13 +198,24 @@ int get_branch_offset(Instruction instruction) {
 
   // offset = sign_extend_number(offset, 20);
 
-  int imm12 = (instruction.sbtype.imm7 & 0x40) >> 6;
-  int imm11 = (instruction.sbtype.imm5 & 0x3E) >> 2;
-  int imm7 = (instruction.sbtype.imm7 & 0x01) << 4;
-  int imm5 = (instruction.sbtype.imm5 & 0x0F) << 1;
+  // int imm12 = (instruction.sbtype.imm7 & 0x40) >> 6;
+  // int imm11 = (instruction.sbtype.imm5 & 0x3E) >> 2;
+  // int imm7 = (instruction.sbtype.imm7 & 0x01) << 4;
+  // int imm5 = (instruction.sbtype.imm5 & 0x0F) << 1;
 
-  int offset = imm12 | imm11 | imm7 | imm5;
-  offset = sign_extend_number(offset, 20);  // Sign-extend the offset to 32 bits
+  // int offset = imm12 | imm11 | imm7 | imm5;
+  // offset = sign_extend_number(offset, 20);  // Sign-extend the offset to 32 bits
+
+  // WORKING CODE
+  int imm1 = instruction.sbtype.imm5 & ((1 << (1)) - 1);
+  int imm2 = (instruction.sbtype.imm5 >> 1) & ((1 << (4)) - 1);
+  int imm3 = instruction.sbtype.imm7 & ((1 << (6)) - 1);
+  int imm4 = (instruction.sbtype.imm7 >> 6) & ((1 << (1)) - 1);
+
+  int offset = imm2|(imm3 << 4)|(imm1 << 10)|(imm4 << 11);
+  int result = sign_extend_number(offset<< 1, 21);
+  return result;
+  //following the same logic from get_jump_offset
 
 
   return offset;
@@ -214,7 +225,39 @@ int get_branch_offset(Instruction instruction) {
  * given jump instruction */
 int get_jump_offset(Instruction instruction) {
   /* YOUR CODE HERE */
-  return 0;
+
+   // int bits19to12 = instruction.ujtype.imm & ((1 << 8) - 1);         //extracts first 7 bits -> 19:12 from GC
+  // int bit11 = (instruction.ujtype.imm & (1 << 11) - 1);             //extracts the next bit, bit 11 
+  // int bits1to10 = instruction.ujtype.imm & (((1 << 10) - 1) << 9);  //extracts next 10 bits -> 10:1 from GC
+  // int bit20 = (instruction.ujtype.imm & (1 << 20));                 //extracts last bit, bit 20
+
+  // int combine = (bit20|bits19to12|bit11|bits1to10) << 1;
+  // int result = sign_extend_number(combine, 21);
+
+  // printf("\n\nJUMP OFFSET = %d\n", result);
+  // // 32 - 20  
+  // // we will use this value and add it to PC which is a 32 bit value
+  // // use sign_extend_number to scale accordingly
+  
+  // /* what I learned from the TA
+  //   - need to add a 0 bit as the LSB since the range of imm starts at 1
+  //   - sign extend at the end, not every single extracted partition
+  //   - bits in scrambled order, which mixed up my naming convention for the bits
+  //   - doesn't work but I think I'm close
+  // */
+  // return result;
+
+
+  int imm1 = instruction.ujtype.imm & ((1 << (8)) - 1);
+  int imm2 = (instruction.ujtype.imm >> 8) & ((1 << (1)) - 1);
+  int imm3 = (instruction.ujtype.imm >> 9) & ((1 << (10)) - 1);
+  int imm4 = (instruction.ujtype.imm >> 19) & ((1 << (1)) - 1);
+  
+  int offset = imm3|(imm2 << 10)|(imm1 << 11)|(imm4<<19);
+  int result = sign_extend_number(offset << 1, 21);
+  
+  return result;  
+  //this works!
 }
 
 /* Returns the number of bytes (from the current PC) to the base address using the
