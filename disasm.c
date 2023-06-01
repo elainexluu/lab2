@@ -80,11 +80,12 @@ void write_rtype(Instruction instruction) {
                     handle_invalid_instruction(instruction);
                 break;      
             }
+            break;
 
         /* YOUR CODE HERE */
         case 0x01:
             switch (instruction.rtype.funct7) {
-                case 0x0:
+                case 0x00:
                     print_rtype("sll", instruction);
                     break;
 
@@ -96,6 +97,7 @@ void write_rtype(Instruction instruction) {
                     handle_invalid_instruction(instruction);
                 break;
             }
+            break;
 
         case 0x2:
             print_rtype("slt", instruction);
@@ -115,6 +117,7 @@ void write_rtype(Instruction instruction) {
                     handle_invalid_instruction(instruction);
                 break;
             }
+            break;
         
         case 0x5:
             switch (instruction.rtype.funct7) {
@@ -146,6 +149,7 @@ void write_rtype(Instruction instruction) {
                     handle_invalid_instruction(instruction);
                     break;
             }
+            break;
 
         case 0x7:
             print_rtype("and", instruction);
@@ -159,8 +163,9 @@ void write_rtype(Instruction instruction) {
 }
 
 void write_itype_except_load(Instruction instruction) {
-    switch (instruction.itype.funct3) {
-      
+    int result = (instruction.itype.imm  >> 5) & 0x3f;
+    // printf("/n/n result =  %x\n", result); 
+    switch (instruction.itype.funct3) {  
       /* YOUR CODE HERE */
         case 0x0:
             print_itype_except_load("addi", instruction, instruction.itype.imm);
@@ -179,7 +184,7 @@ void write_itype_except_load(Instruction instruction) {
             break;
 
         case 0x5:
-            switch (instruction.itype.imm) {
+            switch (result) {
                 case 0x00:
                     print_itype_except_load("srli", instruction, instruction.itype.imm);
                     break;
@@ -219,6 +224,7 @@ void write_load(Instruction instruction) {
 
         case 0x1:
             print_load("lh", instruction);
+            break;
 
         case 0x2:
             print_load("lw", instruction);
@@ -288,21 +294,28 @@ void print_itype_except_load(char *name, Instruction instruction, int imm) {
 void print_load(char *name, Instruction instruction) {
 
     /* YOUR CODE HERE */
-    printf(MEM_FORMAT, name, instruction.itype.rd, instruction.itype.rs1,
-        instruction.itype.imm);
+    printf(MEM_FORMAT, name, instruction.itype.rd, instruction.itype.imm,
+        instruction.itype.rs1);
     
 }
 
 void print_store(char *name, Instruction instruction) {
     /* YOUR CODE HERE */
-    printf(MEM_FORMAT, name, instruction.stype.rs2, instruction.stype.imm5,
+    printf(MEM_FORMAT, name, instruction.stype.rs2, get_store_offset(instruction),
         instruction.stype.rs1);
 }
 
 void print_branch(char *name, Instruction instruction) {
     /* YOUR CODE HERE */    
+
+    int branch_offset = get_branch_offset(instruction);
+
+    int sign = sign_extend_number(branch_offset, 13);
+
+
+
     printf(BRANCH_FORMAT, name, instruction.sbtype.rs1, instruction.sbtype.rs2,
-        get_branch_offset(instruction));
+        sign);
 }
 
 void print_lui(Instruction instruction) {
@@ -313,7 +326,7 @@ void print_lui(Instruction instruction) {
 
 void print_jal(Instruction instruction) {
     /* YOUR CODE HERE */
-    printf(JAL_FORMAT, instruction.ujtype.rd, instruction.ujtype.imm);
+    printf(JAL_FORMAT, instruction.ujtype.rd, get_jump_offset(instruction));
 }
 
 void print_ecall(Instruction instruction) {

@@ -147,32 +147,23 @@ Instruction parse_instruction(uint32_t instruction_bits) {
  * interpreted an n-bit integer. */
 int sign_extend_number(unsigned int field, unsigned int n) {
   /* YOUR CODE HERE */
-
   // store the sign bit into var
   unsigned int msb = (field >> (n-1)) & 1;
 
   if (msb == 1) { // sign bit is negative
-
     // add leading 0s to create a 32-bit int
     // result gives higher order bits all 1s
     unsigned int append = (1 << (32-n)) - 1;
-
     // extend the higher order bits into 32-bit int 
     unsigned int extend = append << n;
-
     // bit mask to set the field number with the extended 32-bit int from above
     unsigned int mask = field | extend;
-
     return mask;
 
   } else { // if sign bit is positive (0)
-
     unsigned int set = (1 << n) - 1;
-
     unsigned int mask = field & set;
-
     return mask;
-
   }
 
   // return (int)field << (32 - n) >> (32 - n);
@@ -184,30 +175,32 @@ int sign_extend_number(unsigned int field, unsigned int n) {
 /* Return the number of bytes (from the current PC) to the branch label using
  * the given branch instruction */
 int get_branch_offset(Instruction instruction) {
-  /* YOUR CODE HERE */
 
+  /* YOUR CODE HERE 
   // int extract_imm12 = instruction.sbtype.imm7 >> 6;
   // int extract_imm11 = instruction.sbtype.imm5 | 1;
 
-  // // extracting the 4 most right bits in imm5
-  // int imm5 = (instruction.sbtype.imm5 & 0xF) << 1;
-  // int imm7 = instruction.sbtype.imm7 << 5; // shift to align with imm5 for concat.
+  // extracting the 4 most right bits in imm5
+  int imm5 = (instruction.sbtype.imm5 & 0xF) << 1;
+  int imm7 = instruction.sbtype.imm7 << 5; // shift to align with imm5 for concat.
 
-  // imm12 = imm12 << 13;
-  // imm11 = imm11 << 12;
+  imm12 = imm12 << 13;
+  imm11 = imm11 << 12;
 
-  // int offset = (imm12 | imm11 | imm7 | imm5) << 1;
+  int offset = (imm12 | imm11 | imm7 | imm5) << 1;
 
-  // offset = sign_extend_number(offset, 20);
+  offset = sign_extend_number(offset, 20);
 
-  // int imm12 = (instruction.sbtype.imm7 & 0x40) >> 6;
-  // int imm11 = (instruction.sbtype.imm5 & 0x3E) >> 2;
-  // int imm7 = (instruction.sbtype.imm7 & 0x01) << 4;
-  // int imm5 = (instruction.sbtype.imm5 & 0x0F) << 1;
+  int imm12 = (instruction.sbtype.imm7 & 0x40) >> 6;
+  int imm11 = (instruction.sbtype.imm5 & 0x3E) >> 2;
+  int imm7 = (instruction.sbtype.imm7 & 0x01) << 4;
+  int imm5 = (instruction.sbtype.imm5 & 0x0F) << 1;
 
-  // int offset = imm12 | imm11 | imm7 | imm5;
-  // offset = sign_extend_number(offset, 20);  // Sign-extend the offset to 32 bits
+  int offset = imm12 | imm11 | imm7 | imm5;
+  offset = sign_extend_number(offset, 20);  // Sign-extend the offset to 32 bits
+  */
 
+  
   // WORKING CODE
   int imm1 = instruction.sbtype.imm5 & ((1 << (1)) - 1);
   int imm2 = (instruction.sbtype.imm5 >> 1) & ((1 << (4)) - 1);
@@ -219,8 +212,6 @@ int get_branch_offset(Instruction instruction) {
   return result;
   //following the same logic from get_jump_offset
 
-
-  return offset;
 }
 
 /* Returns the number of bytes (from the current PC) to the jump label using the
@@ -293,3 +284,4 @@ void handle_invalid_write(Address address) {
   printf("Bad Write. Address: 0x%08x\n", address);
   exit(-1);
 }
+
