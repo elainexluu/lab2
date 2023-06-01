@@ -175,6 +175,8 @@ int sign_extend_number(unsigned int field, unsigned int n) {
 
   }
 
+  // return (int)field << (32 - n) >> (32 - n);
+
 
   // return 0;
 }
@@ -255,7 +257,7 @@ int get_jump_offset(Instruction instruction) {
   
   int offset = imm3|(imm2 << 10)|(imm1 << 11)|(imm4<<19);
   int result = sign_extend_number(offset << 1, 21);
-  
+
   return result;  
   //this works!
 }

@@ -192,6 +192,7 @@ void write_itype_except_load(Instruction instruction) {
                     handle_invalid_instruction(instruction);
                 break;
             }
+            break;
         
         case 0x6:
             print_itype_except_load("ori", instruction, instruction.itype.imm);
@@ -281,7 +282,7 @@ void print_itype_except_load(char *name, Instruction instruction, int imm) {
     
     /* YOUR CODE HERE */
     printf(ITYPE_FORMAT, name, instruction.itype.rd, instruction.itype.rs1,
-        instruction.itype.imm);
+        sign_extend_number(imm, 12));
 }
 
 void print_load(char *name, Instruction instruction) {
@@ -301,7 +302,7 @@ void print_store(char *name, Instruction instruction) {
 void print_branch(char *name, Instruction instruction) {
     /* YOUR CODE HERE */    
     printf(BRANCH_FORMAT, name, instruction.sbtype.rs1, instruction.sbtype.rs2,
-        instruction.sbtype.imm5);
+        get_branch_offset(instruction));
 }
 
 void print_lui(Instruction instruction) {
