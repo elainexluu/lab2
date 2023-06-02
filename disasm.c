@@ -163,8 +163,9 @@ void write_rtype(Instruction instruction) {
 }
 
 void write_itype_except_load(Instruction instruction) {
+
     int result = (instruction.itype.imm  >> 5) & 0x3f;
-    // printf("/n/n result =  %x\n", result); 
+    // printf("/n/n result =  %d ", result); 
     switch (instruction.itype.funct3) {  
       /* YOUR CODE HERE */
         case 0x0:
@@ -191,6 +192,7 @@ void write_itype_except_load(Instruction instruction) {
 
                 case 0x20:
                     print_itype_except_load("srai", instruction, instruction.itype.imm);
+                    // (instruction.itype.imm & 0x1F));
                     break;
 
                 default:
@@ -310,9 +312,9 @@ void print_branch(char *name, Instruction instruction) {
 
     int branch_offset = get_branch_offset(instruction);
 
+    // we sign extend to counter the flipped sign
+    // 13 to account for the trailing zero in the first position of the immediate
     int sign = sign_extend_number(branch_offset, 13);
-
-
 
     printf(BRANCH_FORMAT, name, instruction.sbtype.rs1, instruction.sbtype.rs2,
         sign);
