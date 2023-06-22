@@ -103,11 +103,13 @@ void execute_ecall(Processor *p, Byte *memory) {
     switch(p->R[10]) {
         case 1: // print an integer
             printf("%d",p->R[11]);
+            p->PC += 4;
             break;
         case 4: // print a string
             for(i=p->R[11];i<MEMORY_SPACE && load(memory,i,LENGTH_BYTE);i++) {
                 printf("%c",load(memory,i,LENGTH_BYTE));
             }
+            p->PC += 4;
             break;
         case 10: // exit
             printf("exiting the simulator\n");
@@ -115,6 +117,7 @@ void execute_ecall(Processor *p, Byte *memory) {
             break;
         case 11: // print a character
             printf("%c",p->R[11]);
+            p->PC += 4;
             break;
         default: // undefined ecall
             printf("Illegal ecall number %d\n", p->R[10]);
